@@ -1,0 +1,108 @@
+﻿<Window x:Class="TimeKeeper.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TimeKeeper"
+        mc:Ignorable="d"
+        xmlns:vm="clr-namespace:TimeKeeper.ViewModel"
+        xmlns:helpers="clr-namespace:TimeKeeper.XamlHelpers"
+        Title="MainWindow" Height="350" Width="525">
+
+    <Window.DataContext>
+        <vm:MainViewModel></vm:MainViewModel>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <helpers:TimeRangeConverter x:Key="TimeRangeConverter"></helpers:TimeRangeConverter>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25*"></ColumnDefinition>
+            <ColumnDefinition Width="75*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <ListView ItemsSource="{Binding EntryCollection}">
+            
+        </ListView>
+
+        <Grid Grid.Column="1">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" helpers:SizeObserver.Observe="True" helpers:SizeObserver.ObservedWidth="{Binding TimeLabelWidth, Mode=OneWayToSource}">
+                    <Label.Content>
+                        <MultiBinding Converter="{StaticResource TimeRangeConverter}" ConverterParameter="1">
+                            <Binding Path="StartTime"></Binding>
+                            <Binding Path="EndTime"></Binding>
+                        </MultiBinding>
+                    </Label.Content>
+                </Label>
+
+                <Label Grid.Column="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">
+                    <Label.Content>
+                        <MultiBinding Converter="{StaticResource TimeRangeConverter}" ConverterParameter="2">
+                            <Binding Path="StartTime"></Binding>
+                            <Binding Path="EndTime"></Binding>
+                        </MultiBinding>
+                    </Label.Content>
+                </Label>
+
+                <Label Grid.Column="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">
+                    <Label.Content>
+                        <MultiBinding Converter="{StaticResource TimeRangeConverter}" ConverterParameter="3">
+                            <Binding Path="StartTime"></Binding>
+                            <Binding Path="EndTime"></Binding>
+                        </MultiBinding>
+                    </Label.Content>
+                </Label>
+
+                <Label Grid.Column="3" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">
+                    <Label.Content>
+                        <MultiBinding Converter="{StaticResource TimeRangeConverter}" ConverterParameter="4">
+                            <Binding Path="StartTime"></Binding>
+                            <Binding Path="EndTime"></Binding>
+                        </MultiBinding>
+                    </Label.Content>
+                </Label>
+
+                <Label Grid.Column="4" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">
+                    <Label.Content>
+                        <MultiBinding Converter="{StaticResource TimeRangeConverter}" ConverterParameter="5">
+                            <Binding Path="StartTime"></Binding>
+                            <Binding Path="EndTime"></Binding>
+                        </MultiBinding>
+                    </Label.Content>
+                </Label>
+            </Grid>
+            
+            <ListView Grid.Row="1" ItemsSource="{Binding EntryCollection}" helpers:SizeObserver.Observe="True" 
+                      helpers:SizeObserver.ObservedHeight="{Binding ListViewWidth, Mode=OneWayToSource}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Canvas>
+                            <Rectangle Fill="Red" Width="10" Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.BarMargin}"></Rectangle>
+                        </Canvas>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </Grid>
+    </Grid>
+</Window>

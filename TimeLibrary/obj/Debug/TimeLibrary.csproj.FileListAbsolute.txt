@@ -1,0 +1,4 @@
+C:\Users\pat\documents\visual studio 2015\Projects\TimeKeeper\TimeLibrary\bin\Debug\TimeLibrary.dll
+C:\Users\pat\documents\visual studio 2015\Projects\TimeKeeper\TimeLibrary\bin\Debug\TimeLibrary.pdb
+C:\Users\pat\documents\visual studio 2015\Projects\TimeKeeper\TimeLibrary\obj\Debug\TimeLibrary.dll
+C:\Users\pat\documents\visual studio 2015\Projects\TimeKeeper\TimeLibrary\obj\Debug\TimeLibrary.pdb
