@@ -18,7 +18,7 @@ namespace TimeKeeper.XamlHelpers
             long totalTicks = endTime.Ticks - startTime.Ticks;
 
             //TODO:5 should be a dynamic value
-            var interval = totalTicks / 5;
+            var interval = totalTicks / 4;
 
             int index = int.Parse((string)parameter);
 

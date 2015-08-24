@@ -102,6 +102,8 @@
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="XamlHelpers\SizeObserver.cs" />
     <Compile Include="XamlHelpers\TimeRangeConverter.cs" />
+    <Compile Include="XamlHelpers\TimeStartConverter.cs" />
+    <Compile Include="XamlHelpers\TimeWidthConverter.cs" />
     <Page Include="Dictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

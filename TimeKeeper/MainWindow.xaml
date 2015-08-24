@@ -15,9 +15,12 @@
 
     <Window.Resources>
         <helpers:TimeRangeConverter x:Key="TimeRangeConverter"></helpers:TimeRangeConverter>
+        <helpers:TimeStartConverter x:Key="TimeStartConverter"></helpers:TimeStartConverter>
+        <helpers:TimeWidthConverter x:Key="TimeWidthConverter"></helpers:TimeWidthConverter>
     </Window.Resources>
     
     <Grid>
+        
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
@@ -26,18 +29,34 @@
             <ColumnDefinition Width="75*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <ListView ItemsSource="{Binding EntryCollection}">
-            
-        </ListView>
-
-        <Grid Grid.Column="1">
-
+        <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
 
+            <Label Grid.Row="0">Entries</Label>
+
+            <TreeView Grid.Row="1" ItemsSource="{Binding ProjectCollection}">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Entries}">
+                        <Label Content="{Binding Name}" VerticalAlignment="Center" Height="25" />
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+            
+        </Grid>
+        
+        <Grid Grid.Column="1">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <!--Make into a control-->
             <Grid>
+                
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
@@ -48,7 +67,7 @@
 
                 <Label Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" helpers:SizeObserver.Observe="True" helpers:SizeObserver.ObservedWidth="{Binding TimeLabelWidth, Mode=OneWayToSource}">
                     <Label.Content>
-                        <MultiBinding Converter="{StaticResource TimeRangeConverter}" ConverterParameter="1">
+                        <MultiBinding Converter="{StaticResource TimeRangeConverter}" ConverterParameter="0">
                             <Binding Path="StartTime"></Binding>
                             <Binding Path="EndTime"></Binding>
                         </MultiBinding>
@@ -57,7 +76,7 @@
 
                 <Label Grid.Column="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">
                     <Label.Content>
-                        <MultiBinding Converter="{StaticResource TimeRangeConverter}" ConverterParameter="2">
+                        <MultiBinding Converter="{StaticResource TimeRangeConverter}" ConverterParameter="1">
                             <Binding Path="StartTime"></Binding>
                             <Binding Path="EndTime"></Binding>
                         </MultiBinding>
@@ -66,7 +85,7 @@
 
                 <Label Grid.Column="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">
                     <Label.Content>
-                        <MultiBinding Converter="{StaticResource TimeRangeConverter}" ConverterParameter="3">
+                        <MultiBinding Converter="{StaticResource TimeRangeConverter}" ConverterParameter="2">
                             <Binding Path="StartTime"></Binding>
                             <Binding Path="EndTime"></Binding>
                         </MultiBinding>
@@ -75,7 +94,7 @@
 
                 <Label Grid.Column="3" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">
                     <Label.Content>
-                        <MultiBinding Converter="{StaticResource TimeRangeConverter}" ConverterParameter="4">
+                        <MultiBinding Converter="{StaticResource TimeRangeConverter}" ConverterParameter="3">
                             <Binding Path="StartTime"></Binding>
                             <Binding Path="EndTime"></Binding>
                         </MultiBinding>
@@ -84,25 +103,56 @@
 
                 <Label Grid.Column="4" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">
                     <Label.Content>
-                        <MultiBinding Converter="{StaticResource TimeRangeConverter}" ConverterParameter="5">
+                        <MultiBinding Converter="{StaticResource TimeRangeConverter}" ConverterParameter="4">
                             <Binding Path="StartTime"></Binding>
                             <Binding Path="EndTime"></Binding>
                         </MultiBinding>
                     </Label.Content>
                 </Label>
             </Grid>
-            
-            <ListView Grid.Row="1" ItemsSource="{Binding EntryCollection}" helpers:SizeObserver.Observe="True" 
+
+            <ListView Grid.Row="1" ItemsSource="{Binding AllTimes}" helpers:SizeObserver.Observe="True" 
                       helpers:SizeObserver.ObservedHeight="{Binding ListViewWidth, Mode=OneWayToSource}">
+               
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Canvas>
-                            <Rectangle Fill="Red" Width="10" Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}},Path=DataContext.BarMargin}"></Rectangle>
-                        </Canvas>
+                        <ItemsControl ItemsSource="{Binding}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Canvas/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Rectangle Fill="Red">
+                                        <Rectangle.Margin>
+                                            <MultiBinding Converter="{StaticResource TimeStartConverter}">
+                                                <Binding RelativeSource="{RelativeSource AncestorType={x:Type Window}}" Path="DataContext.BarMargin"></Binding>
+                                                <Binding Path="StartTime"></Binding>
+                                                <Binding RelativeSource="{RelativeSource AncestorType={x:Type Window}}" Path="DataContext.StartTime"></Binding>
+                                                <Binding RelativeSource="{RelativeSource AncestorType={x:Type Window}}" Path="DataContext.EndTime"></Binding>
+                                                <Binding RelativeSource="{RelativeSource AncestorType={x:Type ListViewItem}}" Path="ActualWidth"></Binding>
+                                            </MultiBinding>
+                                        </Rectangle.Margin>
+                                        <Rectangle.Width>
+                                            <MultiBinding Converter="{StaticResource TimeWidthConverter}">
+                                                <Binding RelativeSource="{RelativeSource AncestorType={x:Type Window}}" Path="DataContext.BarMargin"></Binding>
+                                                <Binding Path="StartTime"></Binding>
+                                                <Binding Path="EndTime"></Binding>
+                                                <Binding RelativeSource="{RelativeSource AncestorType={x:Type Window}}" Path="DataContext.StartTime"></Binding>
+                                                <Binding RelativeSource="{RelativeSource AncestorType={x:Type Window}}" Path="DataContext.EndTime"></Binding>
+                                                <Binding RelativeSource="{RelativeSource AncestorType={x:Type ListViewItem}}" Path="ActualWidth"></Binding>
+                                            </MultiBinding>
+                                        </Rectangle.Width>
+                                    </Rectangle>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
 
         </Grid>
+        
     </Grid>
 </Window>
